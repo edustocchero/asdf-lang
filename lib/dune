@@ -1,2 +1,9 @@
+(ocamllex lexer)
+
+(menhir
+ (modules parser))
+
 (library
- (name asdf))
+ (name asdf)
+ (preprocess
+  (pps ppx_deriving.show)))
