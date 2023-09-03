@@ -1,0 +1,4 @@
+(executable
+ (public_name asdf)
+ (name main)
+ (libraries asdf))
