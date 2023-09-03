@@ -17,6 +17,7 @@ rule read_token = parse
 | "true" { TRUE }
 | "false" { FALSE }
 | "()" { UNIT }
+| '=' { EQ }
 | '(' { LPARENS }
 | ')' { RPARENS }
 | '|' { PIPE }

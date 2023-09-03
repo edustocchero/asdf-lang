@@ -1,7 +1,8 @@
 open Asdf
 
 let () =
-  let opt_p = Parser.program Lexer.read_token (Lexing.from_string "42") in
+  let s = read_line () in
+  let opt_p = Parser.program Lexer.read_token (Lexing.from_string s) in
   let s = match opt_p with
     | Some e -> Ast.show_expr e
     | None -> "None"

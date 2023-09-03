@@ -15,6 +15,8 @@
 %token LET
 %token IN
 
+%token EQ
+
 %token EOF
 
 %start program
@@ -26,7 +28,18 @@
 
 program:
   | EOF; { None }
-  | e = primary; EOF; { Some e }
+  | e = expr; EOF; { Some e }
+
+let expr :=
+  | sub_expr
+  | let_expr
+
+let let_expr ==
+  | LET; i = IDENTIFIER; EQ; e1 = expr; IN; e2 = expr; { ELet (i, e1, e2) }
+
+let sub_expr :=
+  | primary
+  | LPARENS; e = expr; RPARENS; { e }
 
 let primary :=
   | UNIT; { ELit LUnit }
