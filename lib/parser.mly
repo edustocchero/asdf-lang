@@ -31,8 +31,16 @@ program:
   | e = expr; EOF; { Some e }
 
 let expr :=
-  | sub_expr
+  | lambda
+  | application
   | let_expr
+
+let application :=
+  | sub_expr
+  | e1 = application; e2 = sub_expr; { EApp (e1, e2) }
+
+let lambda ==
+  | PIPE; id = IDENTIFIER; PIPE; e = expr; { ELambda (id, e) }
 
 let let_expr ==
   | LET; i = IDENTIFIER; EQ; e1 = expr; IN; e2 = expr; { ELet (i, e1, e2) }
