@@ -12,6 +12,9 @@ let identifier = ['a'-'z' 'A'-'Z' '_']+
 let whitespace = [' ' '\t']
 
 rule read_token = parse
+| "if" { IF }
+| "then" { THEN }
+| "else" { ELSE }
 | "let" { LET }
 | "in" { IN }
 | "true" { TRUE }

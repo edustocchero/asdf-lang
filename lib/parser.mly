@@ -14,6 +14,9 @@
 
 %token LET
 %token IN
+%token IF
+%token THEN
+%token ELSE
 
 %token EQ
 
@@ -34,6 +37,10 @@ let expr :=
   | lambda
   | application
   | let_expr
+  | if_expr
+
+let if_expr ==
+  | IF; pred = expr; THEN; e1 = expr; ELSE; e2 = expr; { EIf (pred, e1, e2) }
 
 let application :=
   | sub_expr

@@ -4,6 +4,7 @@ type expr =
   | ELambda of string * expr
   | EApp of expr * expr
   | ELet of string * expr * expr
+  | EIf of expr * expr * expr
 [@@deriving show]
 
 and lit =
