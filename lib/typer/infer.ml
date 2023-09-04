@@ -63,7 +63,7 @@ let generalize t =
 
 let rec unify t1 t2 =
   match (t1, t2) with
-  | (TVar _, TVar _) -> ()
+  | (TVar a, TVar b) when a = b -> ()
   | (THole ({ contents = Bound _ } as hole), b) -> unify_hole hole b ~flip:false
   | (a, THole ({ contents = Bound _ } as hole)) -> unify_hole hole a ~flip:true
   | (TFn (a, b), TFn (c, d)) -> unify a c; unify b d;
