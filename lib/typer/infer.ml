@@ -64,10 +64,11 @@ let generalize t =
 let rec unify t1 t2 =
   match (t1, t2) with
   | (TVar a, TVar b) when a = b -> ()
-  | (THole ({ contents = Bound _ } as hole), b) -> unify_hole hole b ~flip:false
-  | (a, THole ({ contents = Bound _ } as hole)) -> unify_hole hole a ~flip:true
+  | (THole a, THole b) when a = b -> ()
+  | (THole (hole), b) -> unify_hole hole b ~flip:false
+  | (a, THole (hole)) -> unify_hole hole a ~flip:true
   | (TFn (a, b), TFn (c, d)) -> unify a c; unify b d;
-  | (_, _) -> raise @@ TypeError "Type error"
+  | (_, _) -> raise @@ TypeError "Types are not equal"
 
 and unify_hole hole t ~flip =
   match hole.contents with
@@ -115,6 +116,6 @@ let rec infer ctx = function
     t1
 
 and infer_lit = function
-  | LUnit -> t_int
+  | LUnit -> t_unit
   | LInt _ -> t_int
   | LBool _ -> t_bool
