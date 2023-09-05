@@ -6,7 +6,7 @@ open Eval.Object
 open Typer
 open Typer.Types
 
-let [@inline never] builtin_exit = OBuiltIn (function OInt i -> exit i; | _ -> OUnit)
+let builtin_exit = OBuiltIn (function OInt i -> exit i; | _ -> OUnit)
 
 let exit_typ = Scheme ([], TFn (t_int, Infer.new_hole ()))
 
