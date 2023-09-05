@@ -21,11 +21,18 @@
 %token EQ
 
 %token EOF
+%token PLUS
+%token MIN
+%token DIV
+%token MUL
 
 %start program
 
 %type <Ast.expr option> program
 %type <Ast.expr> primary
+
+%left PLUS MIN
+%right DIV MUL
 
 %%
 
@@ -33,14 +40,24 @@ program:
   | EOF; { None }
   | e = expr; EOF; { Some e }
 
+%inline op:
+  | PLUS; { EVar "$plus" }
+  | MIN; { EVar "$min" }
+  | MUL; { EVar "$mul" }
+  | DIV; { EVar "$div" }
+
 let expr :=
   | lambda
-  | application
+  | infix
   | let_expr
   | if_expr
 
 let if_expr ==
   | IF; pred = expr; THEN; e1 = expr; ELSE; e2 = expr; { EIf (pred, e1, e2) }
+
+let infix :=
+  | application
+  | l = infix; op = op; r = infix; { EApp (EApp (op, l), r) }
 
 let application :=
   | sub_expr

@@ -20,6 +20,10 @@ rule read_token = parse
 | "true" { TRUE }
 | "false" { FALSE }
 | "()" { UNIT }
+| '+' { PLUS }
+| '-' { MIN }
+| '/' { DIV }
+| '*' { MUL }
 | '=' { EQ }
 | '(' { LPARENS }
 | ')' { RPARENS }
