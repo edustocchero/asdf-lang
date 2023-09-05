@@ -6,6 +6,8 @@ tags: ["topics" "to describe" "your" "project"]
 depends: [
   "ocaml"
   "dune" {>= "3.10"}
+  "ppx_deriving"
+  "menhir"
   "odoc" {with-doc}
 ]
 build: [

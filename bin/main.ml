@@ -52,11 +52,16 @@ let std_env =
 let rec repl () =
   let () = print_string "> " in
   let s = read_line () in
-  let opt_p = Parser.program Lexer.read_token (Lexing.from_string s) in
-  let s = match opt_p with
+  let expr_opt = Parser.program Lexer.read_token (Lexing.from_string s) in
+  let s = match expr_opt with
     | Some e ->
-      let _ = Infer.infer type_ctx e in
-      string_of_object @@ eval std_env e
+      begin try
+        let _ = Infer.infer type_ctx e in
+        string_of_object @@ eval std_env e
+      with
+      | TypeError msg -> msg
+      | EvalException msg -> msg
+      end
     | None -> "None"
   in
   print_endline s;
