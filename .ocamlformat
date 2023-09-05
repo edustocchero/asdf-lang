@@ -1,0 +1,5 @@
+profile = default
+doc-comments = before
+break-cases = all
+type-decl = sparse
+cases-exp-indent = 2
