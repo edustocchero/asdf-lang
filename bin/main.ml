@@ -113,8 +113,10 @@ let rec repl () =
     match expr_opt with
     | Some e -> (
       try
-        let _ = Infer.infer type_ctx e in
-        string_of_object @@ eval std_env e
+        let typ = Infer.infer type_ctx e in
+        let typ_s = show_t typ in
+        let obj_s = string_of_object @@ eval std_env e in
+        "  " ^ obj_s ^ " |- " ^ typ_s
       with
       | TypeError msg -> msg
       | EvalException msg -> msg)

@@ -1,7 +1,7 @@
 open Types
 
 let current_level = ref 1
-let current_id = ref 0
+let current_id = ref (-1)
 let enter_level () = incr current_level
 let exit_level () = decr current_level
 
@@ -22,7 +22,10 @@ end
 
 module Tbl = Hashtbl.Make (HashableInt)
 
+let as_scheme t = Scheme ([], t)
+
 let rec replace_typevars tbl = function
+  | TError e -> TError e
   | TVar s -> TVar s
   | TFn (a, b) -> TFn (replace_typevars tbl a, replace_typevars tbl b)
   | THole { contents = Bound t } -> replace_typevars tbl t
@@ -38,6 +41,7 @@ let instantiate (Scheme (binds, t)) =
   replace_typevars replacing t
 
 let rec occurs id level = function
+  | TError _ -> false
   | TVar _ -> false
   | TFn (a, b) -> occurs id level a || occurs id level b
   | THole { contents = Bound t } -> occurs id level t
@@ -47,7 +51,9 @@ let rec occurs id level = function
     id = id'
 
 let rec type_vars = function
-  | TVar _ -> []
+  | TVar _
+  | TError _ ->
+    []
   | TFn (a, b) -> type_vars a @ type_vars b
   | THole { contents = Bound t } -> type_vars t
   | THole { contents = Unbound (id, level) } ->
@@ -58,6 +64,7 @@ let generalize t =
 
 let rec unify t1 t2 =
   match (t1, t2) with
+  | t, (TError _ as e) -> unify e t
   | TVar a, TVar b when a = b -> ()
   | THole a, THole b when a = b -> ()
   | THole hole, b -> unify_hole hole b ~flip:false
@@ -65,7 +72,10 @@ let rec unify t1 t2 =
   | TFn (a, b), TFn (c, d) ->
     unify a c;
     unify b d
-  | _, _ -> raise @@ TypeError "Types are not equal"
+  | TError e, _ -> raise @@ TypeError e
+  | a_t, b_t ->
+    raise
+    @@ TypeError ("Type mismatch between " ^ show_t a_t ^ " and " ^ show_t b_t)
 
 and unify_hole hole t ~flip =
   match hole.contents with
@@ -80,12 +90,16 @@ open Asdf.Ast
 let rec infer ctx = function
   | ELit l -> infer_lit l
   | EVar s ->
-    let t = Ctx.find s ctx in
+    let t =
+      match Ctx.find_opt s ctx with
+      | Some t -> t
+      | None -> as_scheme (TError ("Cannot infer '" ^ s ^ "'"))
+    in
     let t' = instantiate t in
     t'
   | ELambda (x, e) ->
     let t = new_hole () in
-    let ctx' = Ctx.add x (Scheme ([], t)) ctx in
+    let ctx' = Ctx.add x (as_scheme t) ctx in
     let t' = infer ctx' e in
     TFn (t, t')
   | EApp (e1, e2) ->
