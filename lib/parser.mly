@@ -19,6 +19,13 @@
 %token ELSE
 
 %token EQ
+%token NEQ
+%token LT
+%token LTE
+%token GT
+%token GTE
+%token AND
+%token OR
 
 %token EOF
 %token PLUS
@@ -32,7 +39,10 @@
 %type <Ast.expr> primary
 
 %left PLUS MIN
-%right DIV MUL
+%left DIV MUL
+%left AND OR
+%left EQ NEQ
+%left LTE GTE LT GT
 
 %%
 
@@ -45,6 +55,14 @@ program:
   | MIN; { EVar "$min" }
   | MUL; { EVar "$mul" }
   | DIV; { EVar "$div" }
+  | AND; { EVar "$and" }
+  | OR; { EVar "$or" }
+  | EQ; { EVar "$eq" }
+  | NEQ; { EVar "$neq" }
+  | GT; { EVar "$gt" }
+  | GTE; { EVar "$gte" }
+  | LT; { EVar "$lt" }
+  | LTE; { EVar "$lte" }
 
 let expr :=
   | lambda

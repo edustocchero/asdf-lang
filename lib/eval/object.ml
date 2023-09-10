@@ -18,5 +18,5 @@ let string_of_object = function
   | OUnit -> "()"
   | OInt i -> string_of_int i
   | OBool b -> string_of_bool b
-  | OLambda (_, _, _) -> "<lambda>"
+  | OLambda (_, _, _) -> "λ"
   | OBuiltIn _ -> "<built-in>"

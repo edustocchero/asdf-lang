@@ -25,6 +25,13 @@ rule read_token = parse
 | '/' { DIV }
 | '*' { MUL }
 | '=' { EQ }
+| '!' '=' { NEQ }
+| '<' { LT }
+| '<' '=' { LTE }
+| '>' { GT }
+| '>' '=' { GTE }
+| '&' '&' { AND }
+| '|' '|' { OR }
 | '(' { LPARENS }
 | ')' { RPARENS }
 | '|' { PIPE }
