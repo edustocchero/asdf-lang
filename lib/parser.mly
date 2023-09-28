@@ -4,6 +4,7 @@
 
 %token <string> IDENTIFIER
 %token <int> INT
+%token <string> STRING
 %token TRUE
 %token FALSE
 %token UNIT
@@ -96,4 +97,5 @@ let primary :=
   | TRUE; { ELit (LBool true) }
   | FALSE; { ELit (LBool false) }
   | i = INT; { ELit (LInt i) }
+  | s = STRING; { ELit (LString s) }
   | i = IDENTIFIER; { EVar i }

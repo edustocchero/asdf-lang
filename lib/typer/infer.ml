@@ -128,3 +128,4 @@ and infer_lit = function
   | LUnit -> t_unit
   | LInt _ -> t_int
   | LBool _ -> t_bool
+  | LString _ -> t_string
