@@ -11,4 +11,5 @@ and lit =
   | LUnit
   | LInt of int
   | LBool of bool
+  | LString of string
 [@@deriving show]

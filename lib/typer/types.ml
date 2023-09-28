@@ -18,6 +18,7 @@ and scheme = Scheme of int list * typ
 let t_unit = TVar "()"
 let t_int = TVar "int"
 let t_bool = TVar "bool"
+let t_string = TVar "string"
 
 let rec show_t t =
   match t with

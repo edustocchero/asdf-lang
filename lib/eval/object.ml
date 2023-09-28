@@ -6,6 +6,7 @@ type t =
   | OUnit
   | OInt of int
   | OBool of bool
+  | OString of string
   | OLambda of closure * string * Ast.expr
   | OBuiltIn of builtin
 
@@ -18,5 +19,6 @@ let string_of_object = function
   | OUnit -> "()"
   | OInt i -> string_of_int i
   | OBool b -> string_of_bool b
+  | OString s -> s
   | OLambda (_, _, _) -> "λ"
   | OBuiltIn _ -> "<built-in>"

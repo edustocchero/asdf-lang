@@ -37,3 +37,4 @@ and eval_lit = function
   | LUnit -> OUnit
   | LInt i -> OInt i
   | LBool b -> OBool b
+  | LString s -> OString s
