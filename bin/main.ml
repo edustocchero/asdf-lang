@@ -62,6 +62,17 @@ let builtin_inc =
 
 let inc_typ = Scheme ([], TFn (t_int, t_int))
 
+let builtin_concat =
+  OBuiltIn
+    (fun l ->
+      OBuiltIn
+        (fun r ->
+          match (l, r) with
+          | OString l, OString r -> OString (l ^ r)
+          | _ -> failwith "never"))
+
+let concat_typ = Scheme ([], TFn (t_string, TFn (t_string, t_string)))
+
 let type_ctx =
   [
     ("$plus", arith_typ);
@@ -78,6 +89,7 @@ let type_ctx =
     ("$or", logical_typ);
     ("exit", exit_typ);
     ("inc", inc_typ);
+    ("concat", concat_typ);
   ]
   |> List.to_seq |> Infer.Ctx.of_seq
 
@@ -97,7 +109,9 @@ let ops =
     ("$or", logical ( || ));
   ]
 
-let builtins = [ ("exit", builtin_exit); ("inc", builtin_inc) ]
+let builtins =
+  [ ("exit", builtin_exit); ("inc", builtin_inc); ("concat", builtin_concat) ]
+
 let std_env = ops @ builtins |> List.to_seq |> Env.of_seq
 
 let rec repl () =
