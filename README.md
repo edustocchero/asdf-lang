@@ -30,13 +30,13 @@ dune exec asdf
 
 ```ml
 > true
-true
+true |- bool
 
 > let id = |x| x in id 2
-2
+2 |- int
 
 > let res = inc (2 * 3 + 4) in res
-11
+11 |- int
 ```
 
 ### Roadmap
